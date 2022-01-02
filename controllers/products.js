@@ -1,13 +1,13 @@
 const { response } = require("express");
 const { Product } = require("../models");
 
-const obtenerProductos = async (req, res = response) => {
-  const { limite = 5, desde = 0 } = req.query;
+const getProducts = async (req, res = response) => {
+  const { limit = 5, skip = 0 } = req.query;
   const query = { enable: true };
 
   const [whole, products] = await Promise.all([
     Product.countDocuments(query),
-    Product.find(query).skip(Number(desde)).limit(Number(limite)),
+    Product.find(query).skip(Number(skip)).limit(Number(limit)),
   ]);
 
   res.json({
@@ -16,13 +16,11 @@ const obtenerProductos = async (req, res = response) => {
   });
 };
 
-const obtenerProducto = async (req, res = response) => {
+const getProduct = async (req, res = response) => {
   const { id } = req.params;
-  const producto = await Product.findById(id)
-    .populate("usuario", "nombre")
-    .populate("categoria", "nombre");
+  const product = await Product.findById(id);
 
-  res.json(producto);
+  res.json(product);
 };
 
 const createProduct = async (req, res = response) => {
@@ -50,7 +48,7 @@ const createProduct = async (req, res = response) => {
   res.status(201).json(product);
 };
 
-const actualizarProducto = async (req, res = response) => {
+const updateProduct = async (req, res = response) => {
   const { id } = req.params;
   const { estado, usuario, ...data } = req.body;
 
@@ -65,7 +63,7 @@ const actualizarProducto = async (req, res = response) => {
   res.json(producto);
 };
 
-const borrarProducto = async (req, res = response) => {
+const deleteProduct = async (req, res = response) => {
   const { id } = req.params;
   const productoBorrado = await Product.findByIdAndUpdate(
     id,
@@ -77,9 +75,9 @@ const borrarProducto = async (req, res = response) => {
 };
 
 module.exports = {
+  getProducts,
   createProduct,
-  obtenerProductos,
-  obtenerProducto,
-  actualizarProducto,
-  borrarProducto,
+  getProduct,
+  updateProduct,
+  deleteProduct,
 };

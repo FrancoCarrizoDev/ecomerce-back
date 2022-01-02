@@ -6,6 +6,16 @@ const ProductCategorySchema = Schema({
     required: [true, "El nombre es obligatorio"],
     unique: true,
   },
+  enabled: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "user",
+  },
 });
 
 ProductCategorySchema.methods.toJSON = function () {
