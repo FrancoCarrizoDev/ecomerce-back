@@ -3,8 +3,8 @@ const Role = require("./role");
 const Server = require("./server");
 const User = require("./user");
 const ProductType = require("./productType");
-const ProductSubTypeSchema = require("./productSubType");
-const ProductCategorySchema = require("./productCategories");
+const ProductSubType = require("./productSubType");
+const ProductCategory = require("./productCategories");
 
 module.exports = {
   Product,
@@ -12,6 +12,6 @@ module.exports = {
   Server,
   User,
   ProductType,
-  ProductSubTypeSchema,
-  ProductCategorySchema,
+  ProductSubType,
+  ProductCategory,
 };

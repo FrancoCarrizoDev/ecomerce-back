@@ -5,7 +5,7 @@ const Usuario = require("../models/user");
 
 const usuariosGet = async (req = request, res = response) => {
   const { limite = 5, desde = 0 } = req.query;
-  const query = { estado: true };
+  const query = { enabled: true };
 
   const [total, usuarios] = await Promise.all([
     Usuario.countDocuments(query),
@@ -18,9 +18,9 @@ const usuariosGet = async (req = request, res = response) => {
   });
 };
 
-const usuariosPost = async (req, res = response) => {
-  const { nombre, correo, password, rol } = req.body;
-  const usuario = new Usuario({ nombre, correo, password, rol });
+const createUser = async (req, res = response) => {
+  const { name, email, password, role } = req.body;
+  const usuario = new Usuario({ name, email, password, role });
 
   // Encriptar la contraseña
   const salt = bcryptjs.genSaltSync();
@@ -64,7 +64,7 @@ const usuariosDelete = async (req, res = response) => {
 
 module.exports = {
   usuariosGet,
-  usuariosPost,
+  createUser,
   usuariosPut,
   usuariosPatch,
   usuariosDelete,

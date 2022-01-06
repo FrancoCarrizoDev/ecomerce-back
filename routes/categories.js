@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 
-const { validarJWT, validarCampos, esAdminRole } = require("../middlewares");
+const { validarJWT, validateFields, esAdminRole } = require("../middlewares");
 
 const {
   createCategory,
@@ -10,7 +10,7 @@ const {
   actualizarCategoria,
   borrarCategoria,
 } = require("../controllers/categories");
-const { existeCategoriaPorId } = require("../helpers/db-validators");
+const { existsCategoryById } = require("../helpers/db-validators");
 
 const router = Router();
 
@@ -26,8 +26,8 @@ router.get(
   "/:id",
   [
     check("id", "No es un id de Mongo válido").isMongoId(),
-    check("id").custom(existeCategoriaPorId),
-    validarCampos,
+    check("id").custom(existsCategoryById),
+    validateFields,
   ],
   getCategory
 );
@@ -38,7 +38,7 @@ router.post(
   [
     validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    validarCampos,
+    validateFields,
   ],
   createCategory
 );
@@ -49,8 +49,8 @@ router.put(
   [
     validarJWT,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
-    check("id").custom(existeCategoriaPorId),
-    validarCampos,
+    check("id").custom(existsCategoryById),
+    validateFields,
   ],
   actualizarCategoria
 );
@@ -62,8 +62,8 @@ router.delete(
     validarJWT,
     esAdminRole,
     check("id", "No es un id de Mongo válido").isMongoId(),
-    check("id").custom(existeCategoriaPorId),
-    validarCampos,
+    check("id").custom(existsCategoryById),
+    validateFields,
   ],
   borrarCategoria
 );

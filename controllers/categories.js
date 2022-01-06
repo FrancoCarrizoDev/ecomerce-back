@@ -45,7 +45,7 @@ const createCategory = async (req, res = response) => {
   // Generar la data a guardar
   const data = {
     nombre,
-    usuario: req.usuario._id,
+    usuario: req.user._id,
   };
 
   const category = new ProductCategorySchema(data);
