@@ -13,15 +13,15 @@ const login = async (req, res = response) => {
     // Verificar si el email existe
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({
-        msg: "Usuario / Password no son correctos - correo",
+      return res.status(401).json({
+        msg: "Usuario / Password no son correctos",
       });
     }
 
     // SI el usuario está activo
     if (!user.enabled) {
-      return res.status(400).json({
-        msg: "Usuario / Password no son correctos - estado: false",
+      return res.status(401).json({
+        msg: "Su cuenta ha sido bloqueada, por favor comuníquese con soporte",
       });
     }
 
@@ -29,7 +29,7 @@ const login = async (req, res = response) => {
     const validPassword = bcryptjs.compareSync(password, user.password);
     if (!validPassword) {
       return res.status(400).json({
-        msg: "Usuario / Password no son correctos - password",
+        msg: "Usuario / Password no son correctos",
       });
     }
 
@@ -91,7 +91,18 @@ const googleSignin = async (req, res = response) => {
   }
 };
 
+const renewToken = async (req, res = response) => {
+  const { user } = req;
+  const token = await generarJWT(user.id);
+  res.json({
+    user,
+    token,
+    ok: true,
+  });
+};
+
 module.exports = {
   login,
   googleSignin,
+  renewToken,
 };

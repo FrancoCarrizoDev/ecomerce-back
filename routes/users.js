@@ -10,16 +10,15 @@ const {
 } = require("../helpers/db-validators");
 
 const {
-  usuariosGet,
+  getUsers,
   usuariosPut,
   createUser,
   usuariosDelete,
-  usuariosPatch,
 } = require("../controllers/users");
 
 const router = Router();
 
-router.get("/", usuariosGet);
+router.get("/", getUsers);
 
 router.put(
   "/:id",
@@ -60,7 +59,5 @@ router.delete(
   ],
   usuariosDelete
 );
-
-router.patch("/", usuariosPatch);
 
 module.exports = router;

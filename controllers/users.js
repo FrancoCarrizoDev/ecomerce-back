@@ -1,26 +1,26 @@
 const { response, request } = require("express");
 const bcryptjs = require("bcryptjs");
 
-const Usuario = require("../models/user");
+const { User } = require("../models");
 
-const usuariosGet = async (req = request, res = response) => {
-  const { limite = 5, desde = 0 } = req.query;
+const getUsers = async (req = request, res = response) => {
+  const { limit = 5, skip = 0 } = req.query;
   const query = { enabled: true };
 
-  const [total, usuarios] = await Promise.all([
-    Usuario.countDocuments(query),
-    Usuario.find(query).skip(Number(desde)).limit(Number(limite)),
+  const [total, users] = await Promise.all([
+    User.countDocuments(query),
+    User.find(query).skip(Number(skip)).limit(Number(limit)),
   ]);
 
   res.json({
     total,
-    usuarios,
+    users,
   });
 };
 
 const createUser = async (req, res = response) => {
   const { name, email, password, role } = req.body;
-  const usuario = new Usuario({ name, email, password, role });
+  const usuario = new User({ name, email, password, role });
 
   // Encriptar la contraseña
   const salt = bcryptjs.genSaltSync();
@@ -44,28 +44,21 @@ const usuariosPut = async (req, res = response) => {
     resto.password = bcryptjs.hashSync(password, salt);
   }
 
-  const usuario = await Usuario.findByIdAndUpdate(id, resto);
+  const usuario = await User.findByIdAndUpdate(id, resto);
 
   res.json(usuario);
 };
 
-const usuariosPatch = (req, res = response) => {
-  res.json({
-    msg: "patch API - usuariosPatch",
-  });
-};
-
 const usuariosDelete = async (req, res = response) => {
   const { id } = req.params;
-  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+  const usuario = await User.findByIdAndUpdate(id, { estado: false });
 
   res.json(usuario);
 };
 
 module.exports = {
-  usuariosGet,
+  getUsers,
   createUser,
   usuariosPut,
-  usuariosPatch,
   usuariosDelete,
 };
