@@ -35,8 +35,17 @@ const login = async (req, res = response) => {
 
     // Generar el JWT
     const token = await generarJWT(user.id);
+    const { role } = user;
 
-    res.json({
+    if (role === "ADMIN_ROLE") {
+      return res.json({
+        user,
+        token,
+      });
+    }
+    delete user._doc.role;
+
+    return res.json({
       user,
       token,
     });

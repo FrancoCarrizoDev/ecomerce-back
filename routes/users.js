@@ -41,7 +41,7 @@ router.post(
     check("email", "El correo no es válido").isEmail(),
     check("email").custom(emailExists),
     // check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']),
-    check("role").custom(isValidRole),
+    // check("role").custom(isValidRole),
     validateFields,
   ],
   createUser
