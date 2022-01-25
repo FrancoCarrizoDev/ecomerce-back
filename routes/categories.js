@@ -37,7 +37,7 @@ router.post(
   "/",
   [
     validarJWT,
-    check("nombre", "El nombre es obligatorio").not().isEmpty(),
+    check("name", "El nombre es obligatorio").not().isEmpty(),
     validateFields,
   ],
   createCategory

@@ -1,9 +1,9 @@
 const { Schema, model } = require("mongoose");
 
-const ProductSubTypeSchema = Schema({
-  name: {
+const ProductValueCategory = Schema({
+  value: {
     type: String,
-    required: [true, "El nombre es obligatorio"],
+    required: [true, "El value es obligatorio"],
     unique: true,
   },
   product_category_fk: {
@@ -13,9 +13,9 @@ const ProductSubTypeSchema = Schema({
   },
 });
 
-ProductSubTypeSchema.methods.toJSON = function () {
+ProductValueCategory.methods.toJSON = function () {
   const { __v, enabled, ...data } = this.toObject();
   return data;
 };
 
-module.exports = model("Product_sub_type", ProductSubTypeSchema);
+module.exports = model("Product_value_categorie", ProductValueCategory);

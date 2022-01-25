@@ -1,7 +1,7 @@
 const { response, request } = require("express");
 const jwt = require("jsonwebtoken");
 
-const Usuario = require("../models/user");
+const { User } = require("../models/");
 
 const validarJWT = async (req = request, res = response, next) => {
   const token = req.header("x-token");
@@ -16,7 +16,7 @@ const validarJWT = async (req = request, res = response, next) => {
     const { uid } = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
 
     // leer el usuario que corresponde al uid
-    const usuario = await Usuario.findById(uid);
+    const usuario = await User.findById(uid);
 
     if (!usuario) {
       return res.status(401).json({

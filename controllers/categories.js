@@ -1,27 +1,20 @@
 const { response } = require("express");
-const { ProductCategorySchema } = require("../models");
+const { ProductCategory } = require("../models");
 
 const getCategories = async (req, res = response) => {
   const { limit = 5, skip = 0 } = req.query;
   const query = { enabled: true };
 
-  const [whole, categories] = await Promise.all([
-    ProductCategorySchema.countDocuments(query),
-    ProductCategorySchema.find(query)
-      .populate("usuario", "nombre")
-      .skip(Number(skip))
-      .limit(Number(limit)),
-  ]);
+  const categories = await ProductCategory.find();
 
   res.json({
-    whole,
     categories,
   });
 };
 
 const getCategory = async (req, res = response) => {
   const { id } = req.params;
-  const category = await ProductCategorySchema.findById(id);
+  const category = await ProductCategory.findById(id);
 
   //   const category = await ProductCategorySchema.findById(id).populate(
   //     "usuario",
@@ -33,25 +26,25 @@ const getCategory = async (req, res = response) => {
 
 const createCategory = async (req, res = response) => {
   const name = req.body.name.toUpperCase();
+  const values = req.body.values;
 
-  const categoryDB = await ProductCategorySchema.findOne({ name });
+  const categoryDB = await ProductCategory.findOne({ name });
 
   if (categoryDB) {
     return res.status(400).json({
-      msg: `La categoria ${categoryDB.nombre}, ya existe`,
+      msg: `La categoria ${categoryDB.name}, ya existe`,
     });
   }
 
   // Generar la data a guardar
   const data = {
-    nombre,
-    usuario: req.user._id,
+    name,
   };
 
-  const category = new ProductCategorySchema(data);
+  const category = new ProductCategory(data);
 
   // Guardar DB
-  await categoria.save();
+  await category.save();
 
   res.status(201).json(category);
 };
@@ -63,7 +56,7 @@ const actualizarCategoria = async (req, res = response) => {
   data.nombre = data.nombre.toUpperCase();
   data.usuario = req.usuario._id;
 
-  const categoria = await ProductCategorySchema.findByIdAndUpdate(id, data, {
+  const categoria = await ProductCategory.findByIdAndUpdate(id, data, {
     new: true,
   });
 
@@ -72,7 +65,7 @@ const actualizarCategoria = async (req, res = response) => {
 
 const borrarCategoria = async (req, res = response) => {
   const { id } = req.params;
-  const categoriaBorrada = await ProductCategorySchema.findByIdAndUpdate(
+  const categoriaBorrada = await ProductCategory.findByIdAndUpdate(
     id,
     { estado: false },
     { new: true }

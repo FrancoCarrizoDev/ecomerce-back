@@ -15,6 +15,11 @@ const ProductSchema = Schema({
     ref: "Product_type",
     required: false,
   },
+  color_fk: {
+    type: Schema.Types.ObjectId,
+    ref: "Color",
+    required: false,
+  },
   quantity: {
     type: Number,
     default: 0,
