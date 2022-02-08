@@ -30,8 +30,9 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
   const productValuesCategoryById = await ProductValueCategory.find({
     product_category_fk: id,
   })
-    .sort({ value: 1 })
-    .populate("product_category_fk");
+    .select("value -_id")
+    .sort({ value: 1 });
+  // .populate("product_category_fk");
 
   if (!productValuesCategoryById) {
     return res.status(400).json({
