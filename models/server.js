@@ -13,7 +13,7 @@ class Server {
       auth: "/api/auth",
       buscar: "/api/buscar",
       categories: "/api/categories",
-      valuesCategories: "/api/values-categories",
+      productValueCategories: "/api/product-values-categories",
       products: "/api/products",
       users: "/api/users",
       uploads: "/api/uploads",
@@ -58,8 +58,8 @@ class Server {
     this.app.use(this.paths.buscar, require("../routes/buscar"));
     this.app.use(this.paths.categories, require("../routes/categories"));
     this.app.use(
-      this.paths.valuesCategories,
-      require("../routes/valuesCategories")
+      this.paths.productValueCategories,
+      require("../routes/productValueCategories")
     );
     this.app.use(this.paths.products, require("../routes/products"));
     this.app.use(this.paths.users, require("../routes/users"));

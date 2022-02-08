@@ -2,10 +2,11 @@ const { response } = require("express");
 const { ProductCategory } = require("../models");
 
 const getCategories = async (req, res = response) => {
-  const { limit = 5, skip = 0 } = req.query;
-  const query = { enabled: true };
+  // const { limit = 5, skip = 0 } = req.query;
+  // const query = { enabled: true };
 
-  const categories = await ProductCategory.find();
+  // TODO Ordenar por tipo cuando se llegue a ese momento
+  const categories = await ProductCategory.find().sort({ name: 1 });
 
   res.json({
     categories,
@@ -26,7 +27,6 @@ const getCategory = async (req, res = response) => {
 
 const createCategory = async (req, res = response) => {
   const name = req.body.name.toUpperCase();
-  const values = req.body.values;
 
   const categoryDB = await ProductCategory.findOne({ name });
 

@@ -9,12 +9,12 @@ const ProductValueCategory = Schema({
   product_category_fk: {
     type: Schema.Types.ObjectId,
     ref: "Product_categorie",
-    required: false,
+    required: true,
   },
 });
 
 ProductValueCategory.methods.toJSON = function () {
-  const { __v, enabled, ...data } = this.toObject();
+  const { __v, ...data } = this.toObject();
   return data;
 };
 

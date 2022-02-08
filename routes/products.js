@@ -40,7 +40,7 @@ router.post(
     validarJWT,
     check("name", "El nombre es obligatorio").not().isEmpty(),
     check("price", "El precio debe ser mayor o igual a 0").not().isEmpty(),
-    check("quantiy", "La cantidad debe ser mayor o igual a 0").not().isEmpty(),
+    check("quantity", "La cantidad debe ser mayor o igual a 0").not().isEmpty(),
     // check("quantity").custom(existeCategoriaPorId),
     validateFields,
   ],
