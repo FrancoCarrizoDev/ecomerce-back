@@ -30,7 +30,7 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
   const productValuesCategoryById = await ProductValueCategory.find({
     product_category_fk: id,
   })
-    .select("value -_id")
+    .select("value _id")
     .sort({ value: 1 });
   // .populate("product_category_fk");
 
