@@ -17,10 +17,11 @@ const getCategory = async (req, res = response) => {
   const { id } = req.params;
   const category = await ProductCategory.findById(id);
 
-  //   const category = await ProductCategorySchema.findById(id).populate(
-  //     "usuario",
-  //     "nombre"
-  //   );
+  if (!category) {
+    return res.status(400).json({
+      msg: `La categoria no existe`,
+    });
+  }
 
   res.json(category);
 };
