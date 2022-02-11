@@ -29,6 +29,7 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
 
   const productValuesCategoryById = await ProductValueCategory.find({
     product_category_fk: id,
+    enabled: true,
   })
     .select("value _id")
     .sort({ value: 1 });
@@ -39,8 +40,6 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
       msg: `No existe la categoría ${productValuesCategoryById}`,
     });
   }
-
-  // // Generar la data a guardar
 
   res.status(200).json(productValuesCategoryById);
 };
@@ -56,7 +55,6 @@ const createProductValueCategory = async (req, res = response) => {
     });
   }
 
-  // // Generar la data a guardar
   const data = {
     value,
     product_category_fk: product_category_id,
@@ -64,13 +62,50 @@ const createProductValueCategory = async (req, res = response) => {
 
   const productValueCategory = new ProductValueCategory(data);
 
-  // // Guardar DB
   await productValueCategory.save();
 
   res.status(201).json(productValueCategory);
 };
 
+const editProductValueCategory = async (req, res = response) => {
+  const { id, value } = req.body;
+
+  const productValueCategoryDB = await ProductValueCategory.findOneAndUpdate(
+    { _id: id },
+    { value: value },
+    { new: true }
+  );
+
+  if (!productValueCategoryDB) {
+    return res.status(400).json({
+      msg: `No existe ese valor de categoría`,
+    });
+  }
+
+  res.status(200).json(productValueCategoryDB);
+};
+
+const disableProductValueCategory = async (req, res = response) => {
+  const { id } = req.body;
+
+  const productValueCategoryDB = await ProductValueCategory.findOneAndUpdate(
+    { _id: id },
+    { enabled: false },
+    { new: true }
+  );
+
+  if (!productValueCategoryDB) {
+    return res.status(400).json({
+      msg: `No existe ese valor de categoría`,
+    });
+  }
+
+  res.status(200).json(productValueCategoryDB);
+};
+
 module.exports = {
   createProductValueCategory,
   getProductValuesCategoryByCategoryId,
+  disableProductValueCategory,
+  editProductValueCategory,
 };

@@ -3,25 +3,21 @@ const { check } = require("express-validator");
 
 const { validarJWT, validateFields, esAdminRole } = require("../middlewares");
 
-const { getProducts } = require("../controllers/products");
 const {
   createProductValueCategory,
   getProductValuesCategoryByCategoryId,
+  disableProductValueCategory,
+  editProductValueCategory,
 } = require("../controllers/productValueCategories");
 
 const router = Router();
 
-//  Obtener todas las categorias - publico
-// router.get("/", getProducts);
-
-// Obtener una categoria por id - publico
 router.get(
   "/:id",
   [check("id", "No es un id de Mongo válido").isMongoId(), validateFields],
   getProductValuesCategoryByCategoryId
 );
 
-// Crear categoria - privado - cualquier persona con un token válido
 router.post(
   "/",
   [
@@ -34,6 +30,29 @@ router.post(
     validateFields,
   ],
   createProductValueCategory
+);
+
+router.put(
+  "/",
+  [
+    validarJWT,
+    check("value", "El nombre es obligatorio").not().isEmpty(),
+    check("id", "El id del valor de categoría es obligatorio").not().isEmpty(),
+    check("id", "No es un id de Mongo válido").isMongoId(),
+    validateFields,
+  ],
+  editProductValueCategory
+);
+
+router.delete(
+  "/",
+  [
+    validarJWT,
+    check("id", "El id es obligatorio").not().isEmpty(),
+    check("id", "No es un id de Mongo válido").isMongoId(),
+    validateFields,
+  ],
+  disableProductValueCategory
 );
 
 module.exports = router;

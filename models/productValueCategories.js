@@ -4,7 +4,11 @@ const ProductValueCategory = Schema({
   value: {
     type: String,
     required: [true, "El value es obligatorio"],
-    unique: true,
+    unique: false,
+  },
+  enabled: {
+    type: Boolean,
+    default: true,
   },
   product_category_fk: {
     type: Schema.Types.ObjectId,
