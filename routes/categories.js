@@ -7,7 +7,7 @@ const {
   createCategory,
   getCategories,
   getCategory,
-  actualizarCategoria,
+  updateProductCategory,
   borrarCategoria,
 } = require("../controllers/categories");
 const { existsCategoryById } = require("../helpers/db-validators");
@@ -52,7 +52,7 @@ router.put(
     check("id").custom(existsCategoryById),
     validateFields,
   ],
-  actualizarCategoria
+  updateProductCategory
 );
 
 // Borrar una categoria - Admin

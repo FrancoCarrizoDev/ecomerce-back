@@ -27,7 +27,7 @@ const getCategory = async (req, res = response) => {
 };
 
 const createCategory = async (req, res = response) => {
-  const name = req.body.name.toUpperCase();
+  const { name } = req.body;
 
   const categoryDB = await ProductCategory.findOne({ name });
 
@@ -44,13 +44,12 @@ const createCategory = async (req, res = response) => {
 
   const category = new ProductCategory(data);
 
-  // Guardar DB
   await category.save();
 
   res.status(201).json(category);
 };
 
-const actualizarCategoria = async (req, res = response) => {
+const updateProductCategory = async (req, res = response) => {
   const { id } = req.params;
   const { estado, usuario, ...data } = req.body;
 
@@ -79,6 +78,6 @@ module.exports = {
   createCategory,
   getCategories,
   getCategory,
-  actualizarCategoria,
+  updateProductCategory,
   borrarCategoria,
 };
