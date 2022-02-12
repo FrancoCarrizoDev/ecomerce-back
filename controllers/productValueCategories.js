@@ -47,14 +47,6 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
 const createProductValueCategory = async (req, res = response) => {
   const { value, product_category_id } = req.body;
 
-  const productValueCategoryDB = await ProductValueCategory.findOne({ value });
-
-  if (productValueCategoryDB) {
-    return res.status(400).json({
-      msg: `El valor ${productValueCategoryDB.value} ya existe para esa categoria`,
-    });
-  }
-
   const data = {
     value,
     product_category_fk: product_category_id,
@@ -68,7 +60,8 @@ const createProductValueCategory = async (req, res = response) => {
 };
 
 const editProductValueCategory = async (req, res = response) => {
-  const { id, value } = req.body;
+  const { id } = req.params;
+  const { value } = req.body;
 
   const productValueCategoryDB = await ProductValueCategory.findOneAndUpdate(
     { _id: id },
@@ -86,7 +79,7 @@ const editProductValueCategory = async (req, res = response) => {
 };
 
 const disableProductValueCategory = async (req, res = response) => {
-  const { id } = req.body;
+  const { id } = req.params;
 
   const productValueCategoryDB = await ProductValueCategory.findOneAndUpdate(
     { _id: id },

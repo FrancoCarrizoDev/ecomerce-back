@@ -6,7 +6,9 @@ const getCategories = async (req, res = response) => {
   // const query = { enabled: true };
 
   // TODO Ordenar por tipo cuando se llegue a ese momento
-  const categories = await ProductCategory.find().sort({ name: 1 });
+  const categories = await ProductCategory.find({ enabled: true }).sort({
+    name: 1,
+  });
 
   res.json({
     categories,
@@ -29,15 +31,6 @@ const getCategory = async (req, res = response) => {
 const createCategory = async (req, res = response) => {
   const name = req.body.name.toUpperCase();
 
-  const categoryDB = await ProductCategory.findOne({ name });
-
-  if (categoryDB) {
-    return res.status(400).json({
-      msg: `La categoria ${categoryDB.name}, ya existe`,
-    });
-  }
-
-  // Generar la data a guardar
   const data = {
     name,
   };
@@ -50,12 +43,13 @@ const createCategory = async (req, res = response) => {
   res.status(201).json(category);
 };
 
-const actualizarCategoria = async (req, res = response) => {
+const updateProductCategory = async (req, res = response) => {
   const { id } = req.params;
-  const { estado, usuario, ...data } = req.body;
+  const { name } = req.body;
 
-  data.nombre = data.nombre.toUpperCase();
-  data.usuario = req.usuario._id;
+  const data = {
+    name: name.toUpperCase(),
+  };
 
   const categoria = await ProductCategory.findByIdAndUpdate(id, data, {
     new: true,
@@ -64,13 +58,19 @@ const actualizarCategoria = async (req, res = response) => {
   res.json(categoria);
 };
 
-const borrarCategoria = async (req, res = response) => {
+const deleteProductCategory = async (req, res = response) => {
   const { id } = req.params;
   const categoriaBorrada = await ProductCategory.findByIdAndUpdate(
     id,
-    { estado: false },
+    { enabled: false },
     { new: true }
   );
+
+  if (!categoriaBorrada) {
+    return res.status(400).json({
+      msg: `No se pudo eliminar la categoría`,
+    });
+  }
 
   res.json(categoriaBorrada);
 };
@@ -79,6 +79,6 @@ module.exports = {
   createCategory,
   getCategories,
   getCategory,
-  actualizarCategoria,
-  borrarCategoria,
+  updateProductCategory,
+  deleteProductCategory,
 };

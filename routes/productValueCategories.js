@@ -33,7 +33,7 @@ router.post(
 );
 
 router.put(
-  "/",
+  "/:id",
   [
     validarJWT,
     check("value", "El nombre es obligatorio").not().isEmpty(),
@@ -45,7 +45,7 @@ router.put(
 );
 
 router.delete(
-  "/",
+  "/:id",
   [
     validarJWT,
     check("id", "El id es obligatorio").not().isEmpty(),
