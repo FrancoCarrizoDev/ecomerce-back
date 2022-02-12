@@ -29,7 +29,7 @@ const getCategory = async (req, res = response) => {
 };
 
 const createCategory = async (req, res = response) => {
-  const name = req.body.name.toUpperCase();
+  const { name } = req.body;
 
   const data = {
     name,
@@ -37,7 +37,6 @@ const createCategory = async (req, res = response) => {
 
   const category = new ProductCategory(data);
 
-  // Guardar DB
   await category.save();
 
   res.status(201).json(category);
