@@ -6,7 +6,7 @@ const ProductType = require("./productType");
 const ProductSubType = require("./productSubType");
 const ProductCategory = require("./productCategories");
 const ProductValueCategory = require("./productValueCategories");
-const Color = require("./color");
+const ProductTypeCategorySchema = require("./productTypeCategories");
 
 module.exports = {
   Product,
@@ -17,5 +17,5 @@ module.exports = {
   ProductSubType,
   ProductCategory,
   ProductValueCategory,
-  Color,
+  ProductTypeCategorySchema,
 };
