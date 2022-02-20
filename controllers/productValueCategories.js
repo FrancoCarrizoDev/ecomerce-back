@@ -1,5 +1,5 @@
-const { response } = require("express");
-const { ProductValueCategory } = require("../models");
+const { response } = require('express')
+const { ProductValueCategory } = require('../models')
 
 // const getCategories = async (req, res = response) => {
 //   const { limit = 5, skip = 0 } = req.query;
@@ -25,80 +25,80 @@ const { ProductValueCategory } = require("../models");
 // };
 
 const getProductValuesCategoryByCategoryId = async (req, res = response) => {
-  const { id } = req.params;
+  const { id } = req.params
 
   const productValuesCategoryById = await ProductValueCategory.find({
     product_category_fk: id,
-    enabled: true,
+    enabled: true
   })
-    .select("value _id")
-    .sort({ value: 1 });
+    .select('value _id')
+    .sort({ value: 1 })
   // .populate("product_category_fk");
 
   if (!productValuesCategoryById) {
     return res.status(400).json({
-      msg: `No existe la categoría ${productValuesCategoryById}`,
-    });
+      msg: `No existe la categoría ${productValuesCategoryById}`
+    })
   }
 
-  res.status(200).json(productValuesCategoryById);
-};
+  res.status(200).json(productValuesCategoryById)
+}
 
 const createProductValueCategory = async (req, res = response) => {
-  const { value, product_category_id } = req.body;
+  const { value, product_category_id } = req.body
 
   const data = {
     value,
-    product_category_fk: product_category_id,
-  };
+    product_category_fk: product_category_id
+  }
 
-  const productValueCategory = new ProductValueCategory(data);
+  const productValueCategory = new ProductValueCategory(data)
 
-  await productValueCategory.save();
+  await productValueCategory.save()
 
-  res.status(201).json(productValueCategory);
-};
+  res.status(201).json(productValueCategory)
+}
 
 const editProductValueCategory = async (req, res = response) => {
-  const { id } = req.params;
-  const { value } = req.body;
+  const { id } = req.params
+  const { value } = req.body
 
   const productValueCategoryDB = await ProductValueCategory.findOneAndUpdate(
     { _id: id },
     { value: value },
     { new: true }
-  );
+  )
 
   if (!productValueCategoryDB) {
     return res.status(400).json({
-      msg: `No existe ese valor de categoría`,
-    });
+      msg: 'No existe ese valor de categoría'
+    })
   }
 
-  res.status(200).json(productValueCategoryDB);
-};
+  res.status(200).json(productValueCategoryDB)
+}
 
 const disableProductValueCategory = async (req, res = response) => {
-  const { id } = req.params;
+  const { id } = req.params
 
   const productValueCategoryDB = await ProductValueCategory.findOneAndUpdate(
     { _id: id },
     { enabled: false },
     { new: true }
-  );
+  )
 
   if (!productValueCategoryDB) {
     return res.status(400).json({
-      msg: `No existe ese valor de categoría`,
-    });
+      msg: 'No existe ese valor de categoría'
+    })
   }
 
-  res.status(200).json(productValueCategoryDB);
-};
+  res.status(200).json(productValueCategoryDB)
+}
 
 module.exports = {
   createProductValueCategory,
   getProductValuesCategoryByCategoryId,
   disableProductValueCategory,
-  editProductValueCategory,
-};
+  editProductValueCategory
+}

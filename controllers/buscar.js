@@ -1,100 +1,100 @@
-const { response } = require("express");
-const { ObjectId } = require("mongoose").Types;
+const { response } = require('express')
+const { ObjectId } = require('mongoose').Types
 
-const { Usuario, Categoria, Product } = require("../models");
+const { Usuario, Categoria, Product } = require('../models')
 
-const coleccionesPermitidas = ["usuarios", "categorias", "productos", "roles"];
+const coleccionesPermitidas = ['usuarios', 'categorias', 'productos', 'roles']
 
-const buscarUsuarios = async (termino = "", res = response) => {
-  const esMongoID = ObjectId.isValid(termino); // TRUE
+const buscarUsuarios = async (termino = '', res = response) => {
+  const esMongoID = ObjectId.isValid(termino) // TRUE
 
   if (esMongoID) {
-    const usuario = await Usuario.findById(termino);
+    const usuario = await Usuario.findById(termino)
     return res.json({
-      results: usuario ? [usuario] : [],
-    });
+      results: usuario ? [usuario] : []
+    })
   }
 
-  const regex = new RegExp(termino, "i");
+  const regex = new RegExp(termino, 'i')
   const usuarios = await Usuario.find({
     $or: [{ nombre: regex }, { correo: regex }],
-    $and: [{ estado: true }],
-  });
+    $and: [{ estado: true }]
+  })
 
   res.json({
-    results: usuarios,
-  });
-};
+    results: usuarios
+  })
+}
 
-const buscarCategorias = async (termino = "", res = response) => {
-  const esMongoID = ObjectId.isValid(termino); // TRUE
+const buscarCategorias = async (termino = '', res = response) => {
+  const esMongoID = ObjectId.isValid(termino) // TRUE
 
   if (esMongoID) {
-    const categoria = await Categoria.findById(termino);
+    const categoria = await Categoria.findById(termino)
     return res.json({
-      results: categoria ? [categoria] : [],
-    });
+      results: categoria ? [categoria] : []
+    })
   }
 
-  const regex = new RegExp(termino, "i");
-  const categorias = await Categoria.find({ nombre: regex, estado: true });
+  const regex = new RegExp(termino, 'i')
+  const categorias = await Categoria.find({ nombre: regex, estado: true })
 
   res.json({
-    results: categorias,
-  });
-};
+    results: categorias
+  })
+}
 
-const buscarProductos = async (termino = "", res = response) => {
-  const esMongoID = ObjectId.isValid(termino); // TRUE
+const buscarProductos = async (termino = '', res = response) => {
+  const esMongoID = ObjectId.isValid(termino) // TRUE
 
   if (esMongoID) {
     const producto = await Product.findById(termino).populate(
-      "categoria",
-      "nombre"
-    );
+      'categoria',
+      'nombre'
+    )
     return res.json({
-      results: producto ? [producto] : [],
-    });
+      results: producto ? [producto] : []
+    })
   }
 
-  const regex = new RegExp(termino, "i");
+  const regex = new RegExp(termino, 'i')
   const productos = await Product.find({
     nombre: regex,
-    estado: true,
-  }).populate("categoria", "nombre");
+    estado: true
+  }).populate('categoria', 'nombre')
 
   res.json({
-    results: productos,
-  });
-};
+    results: productos
+  })
+}
 
 const buscar = (req, res = response) => {
-  const { coleccion, termino } = req.params;
+  const { coleccion, termino } = req.params
 
   if (!coleccionesPermitidas.includes(coleccion)) {
     return res.status(400).json({
-      msg: `Las colecciones permitidas son: ${coleccionesPermitidas}`,
-    });
+      msg: `Las colecciones permitidas son: ${coleccionesPermitidas}`
+    })
   }
 
   switch (coleccion) {
-    case "usuarios":
-      buscarUsuarios(termino, res);
-      break;
-    case "categorias":
-      buscarCategorias(termino, res);
-      break;
-    case "productos":
-      buscarProductos(termino, res);
-      break;
+    case 'usuarios':
+      buscarUsuarios(termino, res)
+      break
+    case 'categorias':
+      buscarCategorias(termino, res)
+      break
+    case 'productos':
+      buscarProductos(termino, res)
+      break
 
     default:
       res.status(500).json({
-        msg: "Se le olvido hacer esta búsquda",
-      });
+        msg: 'Se le olvido hacer esta búsquda'
+      })
   }
-};
+}
 
 module.exports = {
-  buscar,
-};
+  buscar
+}
