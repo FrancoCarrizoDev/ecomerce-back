@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload')
 const { dbConnection } = require('../database/config')
 
 class Server {
-  constructor () {
+  constructor() {
     this.app = express()
     this.port = process.env.PORT
 
@@ -14,6 +14,8 @@ class Server {
       buscar: '/api/buscar',
       categories: '/api/categories',
       productValueCategories: '/api/product-values-categories',
+      productTypeCategories: '/api/product-type-categories',
+      productTypeValuesCategories: '/api/product-type-value-categories',
       products: '/api/products',
       users: '/api/users',
       uploads: '/api/uploads'
@@ -29,11 +31,11 @@ class Server {
     this.routes()
   }
 
-  async conectarDB () {
+  async conectarDB() {
     await dbConnection()
   }
 
-  middlewares () {
+  middlewares() {
     // CORS
     this.app.use(cors())
 
@@ -53,20 +55,22 @@ class Server {
     )
   }
 
-  routes () {
+  routes() {
     this.app.use(this.paths.auth, require('../routes/auth'))
     this.app.use(this.paths.buscar, require('../routes/buscar'))
     this.app.use(this.paths.categories, require('../routes/categories'))
+    this.app.use(this.paths.productValueCategories, require('../routes/productValueCategories'))
+    this.app.use(this.paths.productTypeCategories, require('../routes/productTypeCategories'))
     this.app.use(
-      this.paths.productValueCategories,
-      require('../routes/productValueCategories')
+      this.paths.productTypeValuesCategories,
+      require('../routes/productTypeValueCategories')
     )
     this.app.use(this.paths.products, require('../routes/products'))
     this.app.use(this.paths.users, require('../routes/users'))
     this.app.use(this.paths.uploads, require('../routes/uploads'))
   }
 
-  listen () {
+  listen() {
     this.app.listen(this.port, () => {
       console.log('Servidor corriendo en puerto', this.port)
     })

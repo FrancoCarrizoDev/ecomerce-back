@@ -45,6 +45,7 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
 }
 
 const createProductValueCategory = async (req, res = response) => {
+  // eslint-disable-next-line camelcase
   const { value, product_category_id } = req.body
 
   const data = {
