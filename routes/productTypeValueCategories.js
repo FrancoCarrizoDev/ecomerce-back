@@ -5,6 +5,8 @@ const { validateFields, validarJWT } = require('../middlewares')
 
 const {
   getProductTypeValuesCategoryByCategoryId,
+  disableProductTypeValueCategory,
+  editProductTypeValueCategory,
   createProductTypeValueCategory
 } = require('../controllers/productTypeValueCategories')
 
@@ -26,28 +28,28 @@ router.post(
   createProductTypeValueCategory
 )
 
-// router.put(
-//   '/:id',
-//   [
-//     validarJWT,
-//     check('name', 'El nombre es obligatorio').not().isEmpty(),
-//     check('id', 'No es un id de Mongo válido').isMongoId(),
-//     validateFields
-//   ],
-//   updateProductCategory
-// )
+router.put(
+  '/:id',
+  [
+    validarJWT,
+    check('value', 'El valor es obligatorio').not().isEmpty(),
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    validateFields
+  ],
+  editProductTypeValueCategory
+)
 
-// router.delete(
-//   '/:id',
-//   [
-//     validarJWT,
-//     // TODO hacer la parte del esAdminRole,
-//     check('id', 'El id es obligatorio').not().isEmpty(),
-//     check('id', 'No es un id de Mongo válido').isMongoId(),
-//     // check("id").custom(existsCategoryById),
-//     validateFields
-//   ],
-//   deleteProductCategory
-// )
+router.delete(
+  '/:id',
+  [
+    validarJWT,
+    // TODO hacer la parte del esAdminRole,
+    check('id', 'El id es obligatorio').not().isEmpty(),
+    check('id', 'No es un id de Mongo válido').isMongoId(),
+    // check("id").custom(existsCategoryById),
+    validateFields
+  ],
+  disableProductTypeValueCategory
+)
 
 module.exports = router
