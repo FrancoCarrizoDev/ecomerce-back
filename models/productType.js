@@ -10,6 +10,11 @@ const ProductTypeSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: 'Product_sub_type',
     required: false
+  },
+  product_type_category_fk: {
+    type: Schema.Types.ObjectId,
+    ref: 'Product_type_categorie',
+    require: false
   }
 })
 
