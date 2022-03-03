@@ -7,9 +7,10 @@ const {
   getProductTypeCategories,
   createTypeCategory,
   updateProductTypeCategory,
-  deleteProductTypeCategory
+  deleteProductTypeCategory,
+  getProductTypeCategoryByProductId
 } = require('../controllers/productTypeCategories')
-const { existsCategoryById } = require('../helpers/db-validators')
+// const { existsCategoryById } = require('../helpers/db-validators')
 
 const router = Router()
 
@@ -20,13 +21,9 @@ const router = Router()
 router.get('/', getProductTypeCategories)
 
 router.get(
-  '/:id',
-  [
-    check('id', 'No es un id de Mongo válido').isMongoId(),
-    check('id').custom(existsCategoryById),
-    validateFields
-  ],
-  getProductTypeCategories
+  '/:productTypeFk',
+  [check('productTypeFk', 'No es un id de Mongo válido').isMongoId(), validateFields],
+  getProductTypeCategoryByProductId
 )
 
 router.post(

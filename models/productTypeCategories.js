@@ -12,7 +12,8 @@ const ProductTypeCategory = Schema({
   },
   product_type_fk: {
     type: Schema.Types.ObjectId,
-    ref: 'product_type'
+    ref: 'Product_type',
+    required: [true, 'Debe pertenecer a algún tipo']
   }
 })
 

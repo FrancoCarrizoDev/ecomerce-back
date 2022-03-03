@@ -15,9 +15,25 @@ const getProductTypeCategories = async (req, res = response) => {
   })
 }
 
-const getTypeCategory = async (req, res = response) => {
-  const { id } = req.params
-  const typeCategory = await ProductTypeCategory.findById(id)
+// const getTypeCategory = async (req, res = response) => {
+//   const { id } = req.params
+//   const typeCategory = await ProductTypeCategory.findById(id)
+
+//   if (!typeCategory) {
+//     return res.status(400).json({
+//       msg: 'La categoria no existe'
+//     })
+//   }
+
+//   res.json(typeCategory)
+// }
+
+const getProductTypeCategoryByProductId = async (req, res = response) => {
+  const { productTypeFk } = req.params
+  const typeCategory = await ProductTypeCategory.find({
+    product_type_fk: productTypeFk,
+    enabled: true
+  }).populate('product_type_fk', 'name id')
 
   if (!typeCategory) {
     return res.status(400).json({
@@ -32,7 +48,8 @@ const createTypeCategory = async (req, res = response) => {
   const { name } = req.body
 
   const data = {
-    name
+    name,
+    product_type_fk: req.body.product_type_fk ? req.body.product_type_fk : null
   }
 
   const tpyeCategory = new ProductTypeCategory(data)
@@ -77,7 +94,7 @@ const deleteProductTypeCategory = async (req, res = response) => {
 module.exports = {
   createTypeCategory,
   getProductTypeCategories,
-  getTypeCategory,
+  getProductTypeCategoryByProductId,
   updateProductTypeCategory,
   deleteProductTypeCategory
 }

@@ -15,11 +15,27 @@ const getProductSubTypes = async (req, res = response) => {
   })
 }
 
-const getProductSubTypeById = async (req, res = response) => {
-  const { id } = req.params
-  const productSubType = await ProductSubType.findById(id)
+// const getProductSubTypeById = async (req, res = response) => {
+//   const { id } = req.params
+//   const productSubType = await ProductSubType.findById(id).populate('product_type_fk')
 
-  if (!productSubType) {
+//   if (!productSubType) {
+//     return res.status(400).json({
+//       msg: 'El sub tipo de producto no existe'
+//     })
+//   }
+
+//   res.json(productSubType)
+// }
+
+const getProductsSubTypesByTypeId = async (req, res = response) => {
+  const { productTypeFk } = req.params
+  const productSubType = await ProductSubType.find({
+    product_type_fk: productTypeFk,
+    enabled: true
+  }).populate('product_type_fk', 'name id')
+
+  if (productSubType.length === 0) {
     return res.status(400).json({
       msg: 'El sub tipo de producto no existe'
     })
@@ -32,7 +48,8 @@ const createProductSubType = async (req, res = response) => {
   const { name } = req.body
 
   const data = {
-    name
+    name,
+    product_type_fk: req.body.product_type_fk ? req.body.product_type_fk : null
   }
 
   const productSubType = new ProductSubType(data)
@@ -77,7 +94,7 @@ const deleteProductSubType = async (req, res = response) => {
 module.exports = {
   getProductSubTypes,
   createProductSubType,
-  getProductSubTypeById,
   updateProductSubType,
-  deleteProductSubType
+  deleteProductSubType,
+  getProductsSubTypesByTypeId
 }

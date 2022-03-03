@@ -3,9 +3,9 @@ const { check } = require('express-validator')
 const {
   getProductSubTypes,
   createProductSubType,
-  getProductSubTypeById,
   updateProductSubType,
-  deleteProductSubType
+  deleteProductSubType,
+  getProductsSubTypesByTypeId
 } = require('../controllers/productSubType')
 
 const { validateFields } = require('../middlewares')
@@ -15,9 +15,9 @@ const router = Router()
 router.get('/', getProductSubTypes)
 
 router.get(
-  '/:id',
-  [check('id', 'No es un id de Mongo válido').isMongoId(), validateFields],
-  getProductSubTypeById
+  '/:productTypeFk',
+  [check('productTypeFk', 'No es un id de Mongo válido').isMongoId(), validateFields],
+  getProductsSubTypesByTypeId
 )
 
 router.post(

@@ -6,15 +6,9 @@ const ProductTypeSchema = Schema({
     required: [true, 'El nombre es obligatorio'],
     unique: true
   },
-  product_sub_type_fk: {
-    type: Schema.Types.ObjectId,
-    ref: 'Product_sub_type',
-    required: false
-  },
-  product_type_category_fk: {
-    type: Schema.Types.ObjectId,
-    ref: 'Product_type_categorie',
-    require: false
+  enabled: {
+    type: Boolean,
+    default: true
   }
 })
 
