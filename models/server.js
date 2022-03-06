@@ -18,6 +18,8 @@ class Server {
       productValueCategories: '/api/product-values-categories',
       productTypeCategories: '/api/product-type-categories',
       productTypeValuesCategories: '/api/product-type-value-categories',
+      productTycValTyc: '/api/product-tyc-val-tyc',
+      productCatValCat: '/api/product-cat-val-cat',
       products: '/api/products',
       users: '/api/users',
       uploads: '/api/uploads'
@@ -69,6 +71,8 @@ class Server {
       this.paths.productTypeValuesCategories,
       require('../routes/productTypeValueCategories')
     )
+    this.app.use(this.paths.productCatValCat, require('../routes/productCatValCat'))
+    this.app.use(this.paths.productTycValTyc, require('../routes/productTycValTyc'))
     this.app.use(this.paths.products, require('../routes/products'))
     this.app.use(this.paths.users, require('../routes/users'))
     this.app.use(this.paths.uploads, require('../routes/uploads'))

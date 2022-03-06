@@ -8,6 +8,8 @@ const ProductCategory = require('./productCategories')
 const ProductValueCategory = require('./productValueCategories')
 const ProductTypeCategory = require('./productTypeCategories')
 const ProductTypeValueCategory = require('./productTypeValueCategories')
+const ProducTycValTyc = require('./productTycValTyc')
+const ProductCatValCat = require('./productCatValCat')
 
 module.exports = {
   Product,
@@ -19,5 +21,7 @@ module.exports = {
   ProductCategory,
   ProductValueCategory,
   ProductTypeCategory,
-  ProductTypeValueCategory
+  ProductTypeValueCategory,
+  ProducTycValTyc,
+  ProductCatValCat
 }

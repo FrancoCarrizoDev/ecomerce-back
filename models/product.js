@@ -10,21 +10,38 @@ const ProductSchema = Schema({
     type: Number,
     required: true
   },
+  quantity: {
+    type: Number,
+    default: 0
+  },
   product_type_fk: {
     type: Schema.Types.ObjectId,
     ref: 'Product_type',
     required: false
   },
-  quantity: {
-    type: Number,
-    default: 0
+  product_sub_type_fk: {
+    type: Schema.Types.ObjectId,
+    ref: 'Product_sub_type',
+    required: false
   },
+  product_tyc_val_ty_fk: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Product_tyc_val_tyc'
+    }
+  ],
+  product_cat_val_cat_fk: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Product_cat_val_cat'
+    }
+  ],
   enable: {
     type: Boolean,
     required: true,
     default: true
   },
-  img: { type: String }
+  img: { type: String, required: false }
 })
 
 ProductSchema.methods.toJSON = function () {
