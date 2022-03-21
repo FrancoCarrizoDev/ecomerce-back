@@ -6,7 +6,7 @@ const { validarJWT, validateFields } = require('../middlewares')
 const { existsProductById } = require('../helpers/db-validators')
 const {
   getProductTycValTyc,
-  getProductTycValTycById,
+  getProductTycValTycByProductId,
   createProductTycValTyc,
   updateProductTycValTyc
 } = require('../controllers/productTycValTyc')
@@ -18,7 +18,7 @@ router.get('/', getProductTycValTyc)
 router.get(
   '/:id',
   [check('id', 'No es un id de Mongo válido').isMongoId(), validateFields],
-  getProductTycValTycById
+  getProductTycValTycByProductId
 )
 
 router.post(

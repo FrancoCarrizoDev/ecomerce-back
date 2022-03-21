@@ -5,7 +5,45 @@ const getProducts = async (req, res = response) => {
   // const { limit = 5, skip = 0 } = req.query
   // const query = { enable: true }
 
-  const product = await Product.find().select('product_type_values_categories')
+  const product = await Product.find()
+    .populate('product_type_fk', 'name')
+    .populate('product_sub_type_fk', 'name')
+    .populate({
+      path: 'product_tyc_val_tyc_fk',
+      populate: {
+        path: 'product_tyc_fk',
+        populate: {
+          path: 'product_type_categories'
+        }
+      }
+    })
+    .populate({
+      path: 'product_tyc_val_tyc_fk',
+      populate: {
+        path: 'product_val_tyc_fk',
+        populate: {
+          path: 'product_type_value_categories'
+        }
+      }
+    })
+    .populate({
+      path: 'product_cat_val_cat_fk',
+      populate: {
+        path: 'product_cat_fk',
+        populate: {
+          path: 'product_categories'
+        }
+      }
+    })
+    .populate({
+      path: 'product_cat_val_cat_fk',
+      populate: {
+        path: 'product_val_cat_fk',
+        populate: {
+          path: 'product_value_categories'
+        }
+      }
+    })
 
   // const [whole, products] = await Promise.all([
   //   Product.countDocuments(query),
@@ -26,8 +64,8 @@ const getProduct = async (req, res = response) => {
 
 const createProduct = async (req, res = response) => {
   // TODO ojo acá hay que validar si todos las foreign keys son válidas
-  // eslint-disable-next-line camelcase
-  const { name, product_type_values_categories, product_values_categories, ...body } = req.body
+
+  const { name, ...body } = req.body
 
   const productDB = await Product.findOne({ name })
 
@@ -39,22 +77,18 @@ const createProduct = async (req, res = response) => {
 
   // Generar la data a guardar
   const data = {
+    name: name.toUpperCase(),
     price: body.price,
     quantity: body.quantity,
-    name: name.toUpperCase(),
     product_type_fk: body.product_type_fk,
-    product_sub_type_fk: body.product_sub_type_fk
+    product_sub_type_fk: body.product_sub_type_fk,
+    description: body.description,
+    img: body.img,
+    code: body.code
   }
 
   const product = new Product(data)
 
-  product_type_values_categories.forEach((tyValCat) =>
-    product.product_type_values_categories.push(tyValCat)
-  )
-
-  product_values_categories.forEach((valCat) => product.product_values_categories.push(valCat))
-
-  // Guardar DB
   await product.save()
 
   res.status(201).json(product)
@@ -74,6 +108,26 @@ const updateProduct = async (req, res = response) => {
 
   res.json(producto)
 }
+// TODO esta mal el nombre, va a ser updateCategories en general
+const updateTycValTyc = async (req, res = response) => {
+  const { id } = req.params
+  const { tycValTycs, catValCats } = req.body
+
+  const producto = await Product.findById(id)
+
+  if (!producto) {
+    return res.status(400).json({
+      msg: 'El producto no existe'
+    })
+  }
+  // TODO arreglar el envio de este array
+  producto.product_tyc_val_tyc_fk.push(...tycValTycs.productTycValTyc)
+  producto.product_cat_val_cat_fk.push(...catValCats.productCatValCat)
+
+  await producto.save()
+
+  res.json(producto)
+}
 
 const deleteProduct = async (req, res = response) => {
   const { id } = req.params
@@ -87,5 +141,6 @@ module.exports = {
   createProduct,
   getProduct,
   updateProduct,
+  updateTycValTyc,
   deleteProduct
 }

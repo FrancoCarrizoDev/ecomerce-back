@@ -8,6 +8,7 @@ const {
   getProducts,
   getProduct,
   updateProduct,
+  updateTycValTyc,
   deleteProduct
 } = require('../controllers/products')
 
@@ -57,6 +58,12 @@ router.put(
     validateFields
   ],
   updateProduct
+)
+
+router.patch(
+  '/:id',
+  [validarJWT, check('id', 'No es un id de Mongo').isMongoId(), validateFields],
+  updateTycValTyc
 )
 
 // Borrar una categoria - Admin

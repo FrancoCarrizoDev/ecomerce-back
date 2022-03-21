@@ -20,7 +20,7 @@ const getProductCatValCat = async (req, res = response) => {
 const getProductCatValCatById = async (req, res = response) => {
   const { id } = req.params
 
-  const productCatValCat = await ProductCatValCat.findById(id)
+  const productCatValCat = await ProductCatValCat.find({ product_fk: id })
     .populate('product_fk', 'name')
     .populate('product_cat_fk', 'name')
     .populate('product_val_cat_fk', 'value')

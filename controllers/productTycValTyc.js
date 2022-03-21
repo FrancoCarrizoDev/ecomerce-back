@@ -17,10 +17,10 @@ const getProductTycValTyc = async (req, res = response) => {
   })
 }
 
-const getProductTycValTycById = async (req, res = response) => {
+const getProductTycValTycByProductId = async (req, res = response) => {
   const { id } = req.params
 
-  const productTycValTyc = await ProducTycValTyc.findById(id)
+  const productTycValTyc = await ProducTycValTyc.find({ product_fk: id })
     .populate('product_fk', 'name')
     .populate('product_tyc_fk', 'name')
     .populate('product_val_tyc_fk', 'value')
@@ -67,5 +67,5 @@ module.exports = {
   getProductTycValTyc,
   createProductTycValTyc,
   updateProductTycValTyc,
-  getProductTycValTycById
+  getProductTycValTycByProductId
 }

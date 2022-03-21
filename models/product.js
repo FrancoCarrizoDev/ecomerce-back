@@ -24,16 +24,16 @@ const ProductSchema = Schema({
     ref: 'Product_sub_type',
     required: false
   },
-  product_tyc_val_ty_fk: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Product_tyc_val_tyc'
-    }
-  ],
   product_cat_val_cat_fk: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Product_cat_val_cat'
+    }
+  ],
+  product_tyc_val_tyc_fk: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Product_tyc_val_tyc'
     }
   ],
   enable: {
@@ -41,7 +41,9 @@ const ProductSchema = Schema({
     required: true,
     default: true
   },
-  img: { type: String, required: false }
+  img: { type: String, required: false },
+  description: { type: String, required: false },
+  code: { type: String, required: false }
 })
 
 ProductSchema.methods.toJSON = function () {

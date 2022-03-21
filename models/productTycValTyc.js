@@ -8,7 +8,7 @@ const ProducTycValTycSchema = Schema({
   product_tyc_fk: {
     type: Schema.Types.ObjectId,
     ref: 'Product_type_categorie',
-    unique: true
+    unique: false
   },
   product_val_tyc_fk: {
     type: Schema.Types.ObjectId,

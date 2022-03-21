@@ -8,7 +8,7 @@ const ProductCatValCatSchema = Schema({
   product_cat_fk: {
     type: Schema.Types.ObjectId,
     ref: 'Product_categorie',
-    unique: true
+    unique: false
   },
   product_val_cat_fk: {
     type: Schema.Types.ObjectId,
