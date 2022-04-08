@@ -41,7 +41,7 @@ const ProductSchema = Schema({
     required: true,
     default: true
   },
-  img: { type: String, required: false },
+  img: [{ type: Object, required: false }],
   description: { type: String, required: false },
   code: { type: String, required: false }
 })

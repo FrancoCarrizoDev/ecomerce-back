@@ -6,7 +6,7 @@ const { validarJWT, validateFields, esAdminRole } = require('../middlewares')
 const {
   createProduct,
   getProducts,
-  getProduct,
+  getProductById,
   updateProduct,
   updateTycValTyc,
   deleteProduct
@@ -31,7 +31,7 @@ router.get(
     check('id').custom(existsProductById),
     validateFields
   ],
-  getProduct
+  getProductById
 )
 
 // Crear categoria - privado - cualquier persona con un token válido

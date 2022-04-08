@@ -1,11 +1,69 @@
 const { response } = require('express')
 const { Product } = require('../models')
 
-const getProducts = async (req, res = response) => {
-  // const { limit = 5, skip = 0 } = req.query
-  // const query = { enable: true }
+const GENERE_MASCULINE = '6248b3e064fb140df3c26fb5'
 
-  const product = await Product.find()
+const getProducts = async (req, res = response) => {
+  const { limit = 12, skip = 0 } = req.query
+  /*
+      {'children.age': {$gte: 18}},
+    {children:{$elemMatch:{age: {$gte: 18}}}})
+  */
+
+  const [whole, products] = await Promise.all([
+    Product.countDocuments(),
+    Product.find()
+      .skip(Number(skip))
+      .limit(Number(limit))
+      .populate('product_type_fk', 'name')
+      .populate('product_sub_type_fk', 'name')
+      .populate({
+        path: 'product_tyc_val_tyc_fk',
+        populate: {
+          path: 'product_tyc_fk',
+          populate: {
+            path: 'product_type_categories'
+          }
+        }
+      })
+      .populate({
+        path: 'product_tyc_val_tyc_fk',
+        populate: {
+          path: 'product_val_tyc_fk',
+          populate: {
+            path: 'product_type_value_categories'
+          }
+        }
+      })
+      .populate({
+        path: 'product_cat_val_cat_fk',
+        populate: {
+          path: 'product_cat_fk',
+          populate: {
+            path: 'product_categories'
+          }
+        }
+      })
+      .populate({
+        path: 'product_cat_val_cat_fk',
+        populate: {
+          path: 'product_val_cat_fk',
+          populate: {
+            path: 'product_value_categories'
+          }
+        }
+      })
+  ])
+
+  res.json({
+    products,
+    whole
+  })
+}
+
+const getProductById = async (req, res = response) => {
+  const { id } = req.params
+  const product = await Product.findById(id)
     .populate('product_type_fk', 'name')
     .populate('product_sub_type_fk', 'name')
     .populate({
@@ -45,20 +103,6 @@ const getProducts = async (req, res = response) => {
       }
     })
 
-  // const [whole, products] = await Promise.all([
-  //   Product.countDocuments(query),
-  //   Product.find(query).skip(Number(skip)).limit(Number(limit))
-  // ])
-
-  res.json({
-    product
-  })
-}
-
-const getProduct = async (req, res = response) => {
-  const { id } = req.params
-  const product = await Product.findById(id)
-
   res.json(product)
 }
 
@@ -83,7 +127,7 @@ const createProduct = async (req, res = response) => {
     product_type_fk: body.product_type_fk,
     product_sub_type_fk: body.product_sub_type_fk,
     description: body.description,
-    img: body.img,
+    img: [...body.img],
     code: body.code
   }
 
@@ -139,7 +183,7 @@ const deleteProduct = async (req, res = response) => {
 module.exports = {
   getProducts,
   createProduct,
-  getProduct,
+  getProductById,
   updateProduct,
   updateTycValTyc,
   deleteProduct
