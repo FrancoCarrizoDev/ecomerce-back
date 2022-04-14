@@ -33,7 +33,6 @@ const getProductValuesCategoryByCategoryId = async (req, res = response) => {
   })
     .select('value _id')
     .sort({ value: 1 })
-  // .populate("product_category_fk");
 
   if (!productValuesCategoryById) {
     return res.status(400).json({

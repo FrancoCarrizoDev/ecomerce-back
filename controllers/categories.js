@@ -1,5 +1,5 @@
 const { response } = require('express')
-const { ProductCategory } = require('../models')
+const { ProductCategory, ProductValueCategory } = require('../models')
 
 const getCategories = async (req, res = response) => {
   // const { limit = 5, skip = 0 } = req.query;
@@ -10,6 +10,16 @@ const getCategories = async (req, res = response) => {
     name: 1
   })
 
+  await Promise.all(
+    categories.map(async (category) => {
+      const valuesByCategory = await ProductValueCategory.find({
+        product_category_fk: category.id,
+        enabled: true
+      })
+      category._doc.values = valuesByCategory
+    })
+  )
+
   res.json({
     categories
   })
@@ -17,7 +27,11 @@ const getCategories = async (req, res = response) => {
 
 const getCategory = async (req, res = response) => {
   const { id } = req.params
-  const category = await ProductCategory.findById(id)
+  const category = await ProductCategory.findById(id).populate('product_value_categories')
+
+  const valuesbyCategory = await ProductValueCategory.find({ product_category_fk: category.id })
+
+  category._doc.values = valuesbyCategory
 
   if (!category) {
     return res.status(400).json({

@@ -1,8 +1,6 @@
 const { response } = require('express')
 const { Product } = require('../models')
 
-const GENERE_MASCULINE = '6248b3e064fb140df3c26fb5'
-
 const getProducts = async (req, res = response) => {
   const { limit = 12, skip = 0 } = req.query
   /*
